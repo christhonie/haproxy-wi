@@ -20,6 +20,7 @@ try:
 	users = sql.select_users()
 	groups = sql.select_groups()
 	token = sql.get_token(user_id.value)
+	role = sql.get_user_role_by_uuid(user_id.value)
 	cmd = "ps ax |grep checker_mas |grep -v grep |wc -l"
 	checker_master, stderr = funct.subprocess_execute(cmd)
 	cmd = "ps ax |grep checker_worker |grep -v grep |wc -l"
@@ -32,6 +33,7 @@ try:
 	keep_alive, stderr = funct.subprocess_execute(cmd)
 	cmd = "ps ax |grep '(wsgi:api)'|grep -v grep|wc -l"
 	api, stderr = funct.subprocess_execute(cmd)
+	servers = sql.get_dick_permit()
 except:
 	pass
 
@@ -39,7 +41,7 @@ except:
 template = template.render(h2 = 1,
 							autorefresh = 1,
 							title = "Overview",
-							role = sql.get_user_role_by_uuid(user_id.value),
+							role = role,
 							user = user,
 							users = users,
 							groups = groups,
@@ -54,5 +56,6 @@ template = template.render(h2 = 1,
 							error = stderr,
 							versions = funct.versions(),
 							haproxy_wi_log = funct.haproxy_wi_log(),
+							servers = servers,
 							token = token)
 print(template)											
