@@ -7,16 +7,64 @@ $( function() {
    $('.menu li ul li').each(function () {
        var link = $(this).find('a').attr('href');
 	   var link2 = link.split('/')[2]
-       if (cur_url[0] == link2) {
-           $(this).parent().css('display', 'contents');
-           $(this).parent().css('font-size', '13px');
-           $(this).parent().css('top', '0');
-           $(this).parent().css('left', '0');
-           $(this).parent().children().css('margin-left', '-20px');
-		   $(this).parent().find('a').css('padding-left', '20px');
-		   $(this).find('a').css('padding-left', '30px');
-		   $(this).find('a').css('border-left', '4px solid #5D9CEB');
-       }
+	   if (cur_url[1] == null) {
+		cur_url[1] = 'haproxy';
+	   }
+       if (cur_url[0] == link2 && cur_url[1].split('&')[0] != 'service=keepalived' && cur_url[1].split('&')[0] != 'service=nginx') {
+			$(this).parent().css('display', 'contents');
+			$(this).parent().css('font-size', '13px');
+			$(this).parent().css('top', '0');
+			$(this).parent().css('left', '0');
+			$(this).parent().children().css('margin-left', '-20px');
+			$(this).parent().find('a').css('padding-left', '20px');
+			$(this).find('a').css('padding-left', '30px');
+			$(this).find('a').css('border-left', '4px solid #5D9CEB');
+		} else if(cur_url[0] == 'versions.py' && cur_url[1].split('&')[0] == 'service=keepalived' && link2 == 'versions.py?service=keepalived'){ 
+			$(this).parent().css('display', 'contents');
+			$(this).parent().css('font-size', '13px');
+			$(this).parent().css('top', '0');
+			$(this).parent().css('left', '0');
+			$(this).parent().children().css('margin-left', '-20px');
+			$(this).parent().find('a').css('padding-left', '20px');
+			$(this).find('a').css('padding-left', '30px');
+			$(this).find('a').css('border-left', '4px solid #5D9CEB');
+		} else if(cur_url[0] == 'config.py' && cur_url[1].split('&')[0] == 'service=keepalived' && link2 == 'config.py?service=keepalived'){
+			$(this).parent().css('display', 'contents');
+			$(this).parent().css('font-size', '13px');
+			$(this).parent().css('top', '0');
+			$(this).parent().css('left', '0');
+			$(this).parent().children().css('margin-left', '-20px');
+			$(this).parent().find('a').css('padding-left', '20px');
+			$(this).find('a').css('padding-left', '30px');
+			$(this).find('a').css('border-left', '4px solid #5D9CEB');
+		} else if(cur_url[0] == 'versions.py' && cur_url[1].split('&')[0] == 'service=nginx' && link2 == 'versions.py?service=nginx'){ 
+			$(this).parent().css('display', 'contents');
+			$(this).parent().css('font-size', '13px');
+			$(this).parent().css('top', '0');
+			$(this).parent().css('left', '0');
+			$(this).parent().children().css('margin-left', '-20px');
+			$(this).parent().find('a').css('padding-left', '20px');
+			$(this).find('a').css('padding-left', '30px');
+			$(this).find('a').css('border-left', '4px solid #5D9CEB');
+		} else if(cur_url[0] == 'config.py' && cur_url[1].split('&')[0] == 'service=nginx' && link2 == 'config.py?service=nginx'){
+			$(this).parent().css('display', 'contents');
+			$(this).parent().css('font-size', '13px');
+			$(this).parent().css('top', '0');
+			$(this).parent().css('left', '0');
+			$(this).parent().children().css('margin-left', '-20px');
+			$(this).parent().find('a').css('padding-left', '20px');
+			$(this).find('a').css('padding-left', '30px');
+			$(this).find('a').css('border-left', '4px solid #5D9CEB');
+		} else if(cur_url[0] == 'hapservers.py' && cur_url[1].split('&')[0] == 'service=nginx' && link2 == 'hapservers.py?service=nginx'){
+			$(this).parent().css('display', 'contents');
+			$(this).parent().css('font-size', '13px');
+			$(this).parent().css('top', '0');
+			$(this).parent().css('left', '0');
+			$(this).parent().children().css('margin-left', '-20px');
+			$(this).parent().find('a').css('padding-left', '20px');
+			$(this).find('a').css('padding-left', '30px');
+			$(this).find('a').css('border-left', '4px solid #5D9CEB');
+		} 
    });
 });
 
@@ -106,13 +154,14 @@ function setRefreshInterval(interval) {
 	if (interval == "0") {
 		Cookies.remove('auto-refresh');
 		pauseAutoRefresh();
-		$('.auto-refresh').prepend('<img src=/inc/images/update.png alt="restart" class="icon">');
+		$('.auto-refresh').prepend('<span class="service-reload"></span>');
 		$('.auto-refresh').css('margin-top', '-3px');
 		$('#1').text('Auto-refresh');
 		$('#0').text('Auto-refresh');
 		$('.auto-refresh-pause').css('display', 'none');
 		$('.auto-refresh-resume').css('display', 'none');
 		hideAutoRefreshDiv();
+		$.getScript("/inc/fontawesome.min.js")
 	} else {
 		clearInterval(intervalId);
 		Cookies.set('auto-refresh', interval, { expires: 365 });
@@ -134,7 +183,7 @@ function startSetInterval(interval) {
 			if(interval < 60000) {
 				interval = 60000;
 			}
-			intervalId = setInterval('showOverview()', interval);
+			intervalId = setInterval('showOverview(ip, hostnamea)', interval);
 			showOverview(ip, hostnamea); 
 		} else if (cur_url[0] == "viewlogs.py") {
 			intervalId = setInterval('viewLogs()', interval);
@@ -149,8 +198,8 @@ function startSetInterval(interval) {
 			if(interval < 60000) {
 				interval = 60000;
 			}
-			intervalId = setInterval('showOverviewWaf()', interval);
-			showOverviewWaf();
+			intervalId = setInterval('showOverviewWaf(ip, hostnamea)', interval);
+			showOverviewWaf(ip, hostnamea);
 			showWafMetrics();
 		} else if (cur_url[0] == "hapservers.py") {
 			if(interval < 60000) {
@@ -192,53 +241,19 @@ $( document ).ajaxComplete(function( event, request, settings ) {
 	$('#cover').fadeOut('fast');
 	NProgress.done();
 });
-function showOverviewWaf() {
-	if (cur_url[0] == "waf.py") {
-		$.getScript('/inc/chart.min.js');
-		showWafMetrics()
-	}
-	$.ajax( {
-		url: "options.py",
-		data: {
-			act: "overviewwaf",
-			page: cur_url[0],
-			token: $('#token').val()
-		},
-		beforeSend: function() {
-			if (cur_url[0] == "waf.py") {
-				var load_class = 'loading_full_page'
-			} else {
-				var load_class = 'loading'
-			}
-			$('#ajaxwafstatus').html('<img class="'+load_class+'" src="/inc/images/loading.gif" />')
-		},
-		type: "POST",
-		success: function( data ) {
-			$("#ajaxwafstatus").empty();
-			$("#ajaxwafstatus").html(data);
-			$.getScript('/inc/overview.js');			
-			if (cur_url[0] == "waf.py") {
-				$.getScript('/inc/waf.js');
-				$( "input[type=submit], button" ).button();
-				$( "input[type=checkbox]" ).checkboxradio();
-			} else {
-				$('.first-collumn-wi').css('padding', '10px');
-			}
-		}					
-	} );
-}
 function showStats() {
 	$.ajax( {
 		url: "options.py",
 		data: {
 			act: "stats",
 			serv: $("#serv").val(),
+			service: $("#service").val(),
 			token: $('#token').val()
 		},
 		type: "POST",
 		success: function( data ) {
 			$("#ajax").html(data);			
-			window.history.pushState("Stats", "Stats", cur_url[0]+"?serv="+$("#serv").val());
+			window.history.pushState("Stats", "Stats", cur_url[0]+"?service="+$("#service").val()+"&serv="+$("#serv").val());
 			wait();
 		}					
 	} );
@@ -251,7 +266,13 @@ function openStats() {
 }
 function openVersions() {
 	var serv = $("#serv").val();
-	var url = "versions.py?serv="+serv+"&open=open"
+	if (cur_url[1] == "service=keepalived") {
+		var url = "versions.py?service=keepalived&serv="+serv+"&open=open"
+	} else if (cur_url[1] == "service=nginx") {
+		var url = "versions.py?service=nginx&serv="+serv+"&open=open"
+	} else {	
+		var url = "versions.py?serv="+serv+"&open=open"
+	}
 	var win = window.open(url,"_self");
 	win.focus();
 }
@@ -266,6 +287,7 @@ function showLog() {
 	var minut = $('#time_range_out_minut').val()
 	var hour1 = $('#time_range_out_hour1').val()
 	var minut1 = $('#time_range_out_minut1').val()
+	var service = $('#service').val()
 	$.ajax( {
 		url: "options.py",
 		data: {
@@ -277,12 +299,13 @@ function showLog() {
 			minut: minut,
 			hour1: hour1,
 			minut1: minut1,
+			service: service,
 			token: $('#token').val()
 		},
 		type: "POST",
 		success: function( data ) {
 			$("#ajax").html(data);
-			window.history.pushState("Logs", "Logs", cur_url[0]+"?serv="+$("#serv").val()+
+			window.history.pushState("Logs", "Logs", cur_url[0]+"?service="+service+"&serv="+$("#serv").val()+
 																	'&rows='+rows+
 																	'&grep='+grep+
 																	'&hour='+hour+
@@ -341,6 +364,7 @@ function showCompare() {
 			serv: $("#serv").val(),
 			left: $('#left').val(),
 			right: $("#right").val(),
+			service: $("#service").val(),
 			token: $('#token').val()
 		},
 		type: "POST",
@@ -359,6 +383,7 @@ function showCompareConfigs() {
 			serv: $("#serv").val(),
 			act: "showCompareConfigs",
 			open: "open",
+			service: $("#service").val(),
 			token: $('#token').val()
 		},
 		type: "POST",
@@ -366,7 +391,7 @@ function showCompareConfigs() {
 			$("#ajax-compare").html(data);
 			$( "input[type=submit], button" ).button();
 			$( "select" ).selectmenu();
-			window.history.pushState("Show compare config", "Show compare config", cur_url[0]+'?serv='+$("#serv").val()+'&showCompare');
+			window.history.pushState("Show compare config", "Show compare config", cur_url[0]+'?service='+$("#service").val()+'&serv='+$("#serv").val()+'&showCompare');
 		}					
 	} );
 }
@@ -391,27 +416,22 @@ function showConfig() {
 	} );
 }
 function showUploadConfig() {
-	var view = $('#view').val();
-	if(view != "1") {
-		view = ""
-	}
+	var service = $('#service').val();
+	var configver = $('#configver').val();
+	var serv = $("#serv").val()
 	$.ajax( {
 		url: "options.py",
 		data: {
-			serv: $("#serv").val(),
+			serv: serv,
 			act: "configShow",
-			configver: $('#configver').val(),
+			configver: configver,
+			service: service,
 			token: $('#token').val(),
-			view: view 
 		},
 		type: "POST",
 		success: function( data ) {
 			$("#ajax").html(data);
-			if(view == "1") {
-				window.history.pushState("Show config", "Show config", cur_url[0]+"?serv="+$("#serv").val()+"&open=open&configver="+$('#configver').val()+"&view="+$('#view').val());
-			} else {
-				window.history.pushState("Show config", "Show config", cur_url[0]+"?serv="+$("#serv").val()+"&open=open&configver="+$('#configver').val());
-			}
+			window.history.pushState("Show config", "Show config", cur_url[0]+"?service="+service+"&serv="+serv+"&open=open&configver="+configver);
 			$.getScript('/inc/configshow.js');
 		}					
 	} );
@@ -501,8 +521,7 @@ $( function() {
 		$(".show_menu").hide();
 		$("#hide_menu").show();
 		Cookies.set('hide_menu', 'show', { expires: 365 });
-	});
-	
+	});	
 	var hideMenu = Cookies.get('hide_menu');
 	if (hideMenu == "show") {
 		$(".top-menu").show( "drop", "fast" );
@@ -621,7 +640,6 @@ $( function() {
 		return false;
 	}); 
 	$('#auth').submit(function() {
-
 		let searchParams = new URLSearchParams(window.location.search)
 		if(searchParams.has('ref')) {
 			var ref = searchParams.get('ref');
@@ -638,6 +656,9 @@ $( function() {
 			success: function( data ) {
 				if (data.indexOf('ok') != '-1') {
 					window.location.replace(ref);
+				} else if (data.indexOf('disabled') != '-1') {
+					$('.alert').show();
+					$('.alert').html(data);
 				} else if (data.indexOf('ban') != '-1') {
 					ban();				
 				} 
@@ -759,6 +780,15 @@ $( function() {
 				});
 				$( "#tabs" ).tabs( "option", "active", 4 );
 			} );
+			$( ".backup" ).on( "click", function() {
+				$('.menu li ul li').each(function () {
+					$(this).find('a').css('padding-left', '20px')
+					$(this).find('a').css('border-left', '0px solid #5D9CEB');
+					$(this).children(".backup").css('padding-left', '30px');
+					$(this).children(".backup").css('border-left', '4px solid #5D9CEB');
+				});
+				$( "#tabs" ).tabs( "option", "active", 5 );
+			} );
 		}
 	}
 	$( "#haproxyaddserv" ).on('selectmenuchange',function() {
@@ -777,16 +807,33 @@ $( function() {
 					$('#cur_hap_ver').text(data);
 					$('#install').text('Update');
 					$('#install').attr('title', 'Update HAProxy');
-					$('#syn_flood').checkboxradio('disable');
-					$('#syn_flood').prop( "checked", false );
-					$('#syn_flood').checkboxradio('refresh');
 				} else {
 					$('#cur_hap_ver').text('HAProxy has not installed');
 					$('#install').text('Install');
 					$('#install').attr('title', 'Install HAProxy');
-					$('#syn_flood').checkboxradio('enable');
-					$('#syn_flood').prop( "checked", true );
-					$('#syn_flood').checkboxradio('refresh');
+				}
+			}
+		} );
+	});
+	$( "#nginxaddserv" ).on('selectmenuchange',function() {
+		$.ajax( {
+			url: "options.py",
+			data: {
+				get_nginx_v: 1,
+				serv: $('#nginxaddserv option:selected').val(),
+				token: $('#token').val()
+			},
+			type: "POST",
+			success: function( data ) {	
+				data = data.replace(/^\s+|\s+$/g,'');
+				if(data.indexOf('bash') != '-1') {			
+					$('#cur_nginx_ver').text('Nginx has not installed');
+					$('#nginx_install').text('Install');
+					$('#nginx_install').attr('title', 'Install Nginx');				
+				} else {
+					$('#cur_nginx_ver').text(data);
+					$('#nginx_install').text('Update');
+					$('#nginx_install').attr('title', 'Update Nginx');
 				}
 			}
 		} );
@@ -823,86 +870,6 @@ function replace_text(id_textarea, text_var) {
 	var end = beg + len_var
 	var text_val = str.substring(0, beg) + str.substring(end, len);
 	$(id_textarea).text(text_val);
-}
-function createList(color) {
-	if(color == 'white') {
-		list = $('#new_whitelist_name').val() 
-	} else {
-		list = $('#new_blacklist_name').val()
-	}
-	$.ajax( {
-		url: "options.py",
-		data: {
-			bwlists_create: list,
-			color: color,
-			group: $('#group').val(),
-			token: $('#token').val()
-		},
-		type: "POST",
-		success: function( data ) {
-			$("#ajax").html(data); 
-			setTimeout(function() {
-						location.reload();
-					}, 2500 );			 
-		}
-	} );	
-}
-function editList(list, color) {
-	$.ajax( {
-		url: "options.py",
-		data: {
-			bwlists: list,
-			color: color,
-			group: $('#group').val(),
-			token: $('#token').val()
-		},
-		type: "POST",
-		success: function( data ) {
-			if (data.indexOf('danger') != '-1') {
-				$("#ajax").html(data);
-			} else {
-				$('.alert-danger').remove();
-				$('#edit_lists').text(data);
-				$( "#dialog-confirm" ).dialog({
-					resizable: false,
-					height: "auto",
-					width: 650,
-					modal: true,
-					title: "Edit "+color+" list "+list,
-					buttons: {
-						"Just save": function() {
-							$( this ).dialog( "close" );	
-							saveList('save', list, color);
-						},
-						"Save and restart": function() {
-							$( this ).dialog( "close" );	
-							saveList('restart', list, color);
-						},
-						Cancel: function() {
-							$( this ).dialog( "close" );
-						}
-					  }
-				});					
-			} 
-		}
-	} );	
-}
-function saveList(action, list, color) {
-	$.ajax( {
-		url: "options.py",
-		data: {
-			bwlists_save: list,
-			bwlists_content: $('#edit_lists').val(),
-			color: color,
-			group: $('#group').val(),
-			bwlists_restart: action,
-			token: $('#token').val()
-		},
-		type: "POST",
-		success: function( data ) {
-			$("#ajax").html(data); 
-		}
-	} );	
 }
 function createHistroy() {
 	try {

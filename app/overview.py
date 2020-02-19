@@ -35,7 +35,22 @@ try:
 	api, stderr = funct.subprocess_execute(cmd)
 	servers = sql.get_dick_permit()
 except:
-	pass
+	role = ''
+	user = ''
+	users = ''
+	groups = ''
+	roles = ''
+	metrics_master = ''
+	metrics_worker = ''
+	checker_master = ''
+	checker_worker = ''
+	keep_alive = ''
+	api = ''
+	date = ''
+	error = ''
+	versions = ''
+	haproxy_wi_log = ''
+	servers = ''
 
 
 template = template.render(h2 = 1,

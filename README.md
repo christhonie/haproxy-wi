@@ -1,5 +1,5 @@
 # Haproxy web interface
-Web interface(user-friendly web GUI, alerting, monitoring and secure) for managing Haproxy servers. Leave your [feedback](https://github.com/Aidaho12/haproxy-wi/issues)
+Web interface(user-friendly web GUI, alerting, monitoring and secure) for managing HAProxy servers. Leave your [feedback](https://github.com/Aidaho12/haproxy-wi/issues)
 
 # Youtube
 [Demo video](https://www.youtube.com/channel/UCo0lCg24j-H4f0S9kMjp-_w)
@@ -8,43 +8,44 @@ Web interface(user-friendly web GUI, alerting, monitoring and secure) for managi
 [Twitter](https://twitter.com/haproxy_wi), subscribe! I will write there about all the changes and news
 
 # Telegram
-[Channel](https://t.me/haproxy_wi) about Haproxy-wi, talks and questions are welcome
+[Channel](https://t.me/haproxy_wi) about HAProxy-WI, talks and questions are welcome
 # Demo site
 [Demo site](https://demo.haproxy-wi.org) Login/password: admin/admin. Server resets every hour.
 
 ![alt text](image/haproxy-wi-config-show.png "Show config page")
 
 # Features:
-1.	Configure HAProxy In a jiffy with haproxy-wi
-2.	View and analyse Status of all Frontend/backend server via haproxy-wi from a single control panel.
-3.	Enable/disable servers through stats page without rebooting HAProxy
-4.	View/Analyse HAproxy logs straight from the haproxy-wi web interface
-5.	Create and visualise the HAproxy workflow from Web Ui.
-6.	Push Your changes to your HAproxy servers with a single click through web interface
-7.	Get info on past changes, Evaluate your config files and restore a previous stable config anytime with a single click straight from Web interface
-8.	Add/Edit Frontend or backend servers via web interface with a click of a button.
-9.	Edit config of HAProxy and push changes to All Master/Slave server with a single click
-10.	Add Multiple server to ensure Config Sync between servers.
-11.	Auto management of ports assigned to Fronted. 
-12.	Evaluate the changes of recent configs pushed to HAproxy instances straight from web ui
-13.	Multiple User Roles support for privileged based Viewing and editing of Config
-14.	Create Groups and add /remove servers to ensure proper identification for your HAproxy Clusters
-15.	Send notifications to telegram directly from HAProxy-WI
-16.	HAProxy-WI supports high Availability to ensure uptime to all Master slave servers configured
-17.	SSL certificate support.
-18.	SSH Key support for managing multiple HAproxy Servers straight from haproxy-wi
-19. SYN flood protect
-20. Alerting about changes backends state
-21. Alerting about HAProxy service state
-22. Metrics incoming connections
-23. Web acceleration settings
-24. Web application firewall
-25. LDAP support
-26. Keep active HAProxy service
-27. Ability to hide parts of the config with tags for users with "guest" role:  "HideBlockStart" and "HideBlockEnd"
-28. Mobile-ready desing
-29. REST API
-30. Installation and Upgrading HAProxy service via HAProxy-WI
+1.  Installation and updating HAProxy, Nginx and Keepalived with HAProxy-WI
+2.	Configure HAProxy, Nginx and Keepalived In a jiffy with HAProxy-WI
+3.	View and analyse Status of all Frontend/backend server via HAProxy-WI from a single control panel.
+4.	Enable/disable servers through stats page without rebooting HAProxy
+5.	View/Analyse HAproxy, Nginx logs straight from the HAProxy-WI web interface
+6.	Create and visualise the HAProxy workflow from Web Ui.
+7.	Push Your changes to your HAProxy, Nginx and Keepalived servers with a single click through web interface
+8.	Get info on past changes, evaluate your config files and restore a previous stable config anytime with a single click straight from Web interface
+9.	Add/Edit Frontend or backend servers via web interface with a click of a button.
+10.	Edit config of HAProxy, Nginx, Keepalived and push changes to All Master/Slave server with a single click
+11.	Add Multiple server to ensure Config Sync between servers.
+12.	Auto management of ports assigned to Fronted. 
+13.	Evaluate the changes of recent configs pushed to HAProxy, Nginx and Keepalived instances straight from web ui
+14.	Multiple User Roles support for privileged based Viewing and editing of Config
+15.	Create Groups and add /remove servers to ensure proper identification for your HAProxy Clusters
+16.	Send notifications to telegram directly from HAProxy-WI
+17.	HAProxy-WI supports high Availability to ensure uptime to all Master slave servers configured
+18.	SSL certificate support.
+19.	SSH Key support for managing multiple HAProxy Servers straight from HAProxy-WI
+20. SYN flood protect
+21. Alerting about changes backends state
+22. Alerting about HAProxy service state
+23. Metrics incoming connections
+24. Web acceleration settings
+25. Web application firewall
+26. LDAP support
+27. Keep active HAProxy service
+28. Ability to hide parts of the config with tags for users with "guest" role:  "HideBlockStart" and "HideBlockEnd"
+29. Mobile-ready desing
+30. REST API
+31. Backup HAProxy's and Keepalived's config files through HAProxy-WI
 
 ![alt text](image/haproxy-wi-metrics.png "Merics")
 
@@ -80,15 +81,17 @@ Or if use Debian/Ubuntu:
 $ sudo 	apt-get install git  net-tools lshw dos2unix apache2 gcc netcat python3.5 python3.5-mod_wsgi mod_ssl python3-pip g++ freetype2-demos libatlas-base-dev openldap-dev libpq-dev python-dev libxml2-dev libxslt1-dev libldap2-dev libsasl2-dev libffi-dev python3-dev libssl-dev ansible -y
 $ git clone https://github.com/Aidaho12/haproxy-wi.git /var/www/haproxy-wi
 $ chown -R www-data:www-data haproxy-wi/
+```
 
 Both
 
+```
 $ pip3 install -r haproxy-wi/requirements.txt 
 $ chmod +x haproxy-wi/app/*.py 
 $ sudo ln -s /usr/bin/python3.5 /usr/bin/python3
-$ sudo cp config_other/logrotate/* /etc/logrotate.d/
-$ sudo cp config_other/syslog/* /etc/rsyslog.d/
-$ sudo cp config_other/systemd/* /etc/systemd/system/
+$ sudo cp haproxy-wi/config_other/logrotate/* /etc/logrotate.d/
+$ sudo cp haproxy-wi/config_other/syslog/* /etc/rsyslog.d/
+$ sudo cp haproxy-wi/config_other/systemd/* /etc/systemd/system/
 $ sudo systemctl daemon-reload      
 $ sudo systemctl restart httpd
 $ sudo systemctl restart rsyslog
@@ -187,7 +190,7 @@ HAProxy-WI was tested on EL7, EL8 and all scripts too. Debian/Ubuntu OS support 
 
 # Database support
 
-Default Haproxy-WI use Sqlite, if you want use MySQL enable in config, and create database:
+Default HAProxy-WI use Sqlite, if you want use MySQL enable in config, and create database:
 
 ### For MySQL support:
 ```

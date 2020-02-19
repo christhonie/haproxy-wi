@@ -28,6 +28,21 @@ try:
 	token = sql.get_token(user_id.value)
 except:
 	pass
+	
+dir = os.path.dirname(os.getcwd())+"/"+sql.get_setting('lists_path')
+white_dir = os.path.dirname(os.getcwd())+"/"+sql.get_setting('lists_path')+"/"+user_group+"/white"
+black_dir = os.path.dirname(os.getcwd())+"/"+sql.get_setting('lists_path')+"/"+user_group+"/black"
+if not os.path.exists(dir):
+    os.makedirs(dir)
+if not os.path.exists(dir+"/"+user_group):
+    os.makedirs(dir+"/"+user_group)
+if not os.path.exists(white_dir):
+    os.makedirs(white_dir)
+if not os.path.exists(black_dir):
+    os.makedirs(black_dir)
+	
+white_lists = funct.get_files(dir=white_dir, format="lst")
+black_lists = funct.get_files(dir=black_dir, format="lst")
 
 
 template = template.render(title = "Add",
@@ -40,6 +55,8 @@ template = template.render(title = "Add",
 							versions = funct.versions(),
 							options = sql.select_options(),
 							saved_servers = sql.select_saved_servers(),
+							white_lists = white_lists,
+							black_lists = black_lists,
 							token = token)										
 print(template)
 
@@ -153,7 +170,10 @@ if form.getvalue('mode') is not None:
 		server_port = form.getlist('server_port')
 		i = 0
 		for server in servers:
-			servers_split += "    server "+server+" " + server +":"+server_port[i]+ check + "\n"
+			if form.getvalue('template') is None:
+				servers_split += "    server "+server+" " + server +":"+server_port[i]+ check + "\n"
+			else:
+				servers_split += "    server-template "+form.getvalue('prefix')+" "+form.getvalue('template-number')+"  "+ server +":"+server_port[i]+ check + "\n"
 			i += 1
 		
 	compression = form.getvalue("compression")
@@ -216,7 +236,7 @@ try:
 			print("Can't read import config file")
 		
 		funct.logging(serv, "add.py add new %s" % name)
-		print('<div class="line3">')
+		print('<div class="line3" style="position: absolute;top: 35px;left: 200px;">')
 		
 		MASTERS = sql.is_master(serv)
 		for master in MASTERS:
@@ -225,7 +245,7 @@ try:
 		
 		stderr = funct.upload_and_restart(serv, cfg, just_save="save")
 		if stderr:
-			print('<div class="alert alert-danger">%s</div>' % stderr)
+			print('<div class="alert alert-danger">%s</div><div id="close"><span title="Close" style="cursor: pointer; float: right;">X</span></div>' % stderr)
 		else:
 			print('<meta http-equiv="refresh" content="0; url=add.py?add=%s&conf=%s&serv=%s">' % (name, config_add, serv))
 			

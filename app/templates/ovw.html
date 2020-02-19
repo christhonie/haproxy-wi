@@ -10,15 +10,26 @@
 		hostnamea.push("{{s[1]}}")
 	{% endfor %}
 </script>
+<style>
+	.fa-sync-alt { margin-bottom: -1px; }
+</style>
 <table class="overview-wi">
 	<tr class="overviewHead">
 		<td class="padding10 first-collumn-wi">
 			Server
 		</td>
-		<td class="padding10  third-collumn-wi" style="width: 35%;">
+		<td class="padding10  third-collumn-wi" style="width: 20%;">
 			<a href="/app/hapservers.py" title="HAProxy servers overview" class="logs_link">			
 				HAProxy
 			</a>
+		</td>
+		<td class="padding10">			
+			<a href="/app/hapservers.py?service=nginx" title="Nginx servers overview" class="logs_link">
+				Nginx
+			</a>
+		</td>
+		<td class="padding10">			
+			Keealived
 		</td>
 		<td class="padding10">
 			<a href="/app/waf.py" title="WAf servers overview" class="logs_link">
@@ -26,7 +37,9 @@
 			</a>
 		</td  class="padding10">
 		<td>
-			<a onclick="showOverview(ip, hostnamea)" title="Refresh" style="float: right; margin-right: 25px;"><img  src="/inc/images/update.png" alt="hostname" class="icon"></a>
+			<a onclick="showOverview(ip, hostnamea)" title="Refresh" style="float: right; margin-right: 25px;">
+				<span class="service-reload"></span>
+			</a>
 		</td>
 	</tr>
 	{% for s in servers %}
@@ -45,7 +58,9 @@
 			{% endif %}
 		</td> 
 		<td>
-			<a onclick="showOverviewHapWI()" title="Refresh" style="float: right; margin-right: 25px;"><img  src="/inc/images/update.png" alt="restart" class="icon"></a>
+			<a onclick="showOverviewHapWI()" title="Refresh" style="float: right; margin-right: 25px;">
+				<span class="service-reload"></span>
+			</a>
 		</td>
 	</tr>		
 	<tr>
@@ -98,10 +113,10 @@
 			{% endif %}
 			{% if role <= 1 %}
 			<a href="/app/viewlogs.py?viewlogs=keep_alive.log&rows=10&grep=&hour=00&minut=00&hour1=24&minut1=00" title="View keep alive logs" class="logs_link">
-				<span>Keep alive</span>
+				<span>Auto start</span>
 			</a>
 			{% else %}
-				<span>Keep alive</span>
+				<span>Auto star</span>
 			{% endif %}
 		</td>
 	</tr>
@@ -166,9 +181,9 @@
 			{% if counter <= 2 %}
 				<tr class="{{ loop.cycle('odd', 'even') }}">
 					<td class="padding10 first-collumn-wi"> 
-						<a href="users.py#users" title="Edit user" class="logs_link">
+						<a href="users.py#users" title="Edit user" class="logs_link div-pic">
 							{{ USER.1 }}
-							<img src="/inc/images/edit.png" alt="Edit" width="15" style="margin-bottom: -3px;" />
+							
 						</a>
 					</td>
 					{% for group in groups %}
@@ -181,9 +196,8 @@
 			{% else %}
 				<tr style="display: none;" class="show-users {{ loop.cycle('odd', 'even') }}">
 					<td class="padding10 first-collumn-wi"> 
-						<a href="users.py#users" title="Edit user" class="logs_link">
+						<a href="users.py#users" title="Edit user" class="logs_link div-pic">
 							{{ USER.1 }}
-							<img src="/inc/images/edit.png" alt="Edit" width="15" style="margin-bottom: -3px;" />
 						</a>
 					</td>
 					{% for group in groups %}
@@ -215,9 +229,8 @@
 			{% if counter <= 2 %}
 			<tr class="{{ loop.cycle('odd', 'even') }}">
 				<td class="padding10 first-collumn-wi"> 
-					<a href="users.py#groups" title="Edit groups" class="logs_link">
+					<a href="users.py#groups" title="Edit groups" class="logs_link div-pic">
 							{{ group.1 }}
-						<img src="/inc/images/edit.png" alt="Edit" width="15" style="margin-bottom: -3px;" />
 					</a>			
 				</td>
 				<td class="third-collumn-wi" colspan="2">{{ group.2 }}</td>
@@ -225,9 +238,8 @@
 			{% else %}
 			<tr style="display: none;" class="show-groups {{ loop.cycle('odd', 'even') }}">
 				<td class="padding10 first-collumn-wi"> 
-					<a href="users.py#groups" title="Edit groups" class="logs_link">
+					<a href="users.py#groups" title="Edit groups" class="logs_link div-pic">
 							{{ group.1 }}
-						<img src="/inc/images/edit.png" alt="Edit" width="15" style="margin-bottom: -3px;" />
 					</a>			
 				</td>
 				<td class="third-collumn-wi" colspan="2">{{ group.2 }}</td>

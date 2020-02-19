@@ -4,11 +4,23 @@
 			{% if role %}
 				<a class="ui-button ui-widget ui-corner-all" title="Edit this run config" href="config.py?serv={{serv}}&open=open">Edit</a>
 			{% endif %}
-			<a class="accordion-expand-all ui-button ui-widget ui-corner-all" href="#">Expand all</a>		
-			<button id="raw">Raw</button>
-			<button id="according" style="display: none;">According</button>
+			{% if service != 'keepalived' and service != 'nginx' %}
+				<a class="accordion-expand-all ui-button ui-widget ui-corner-all" href="#">Expand all</a>		
+				<button id="raw">Raw</button>
+				<button id="according" style="display: none;">According</button>
+			{% endif %}
 		</p>
 	</center>
+	
+	{% if service == 'nginx' %}
+	<div style="margin-left: 20%; border: 1px solid #ddd; padding-left: 50px; width: 60%;">
+		<pre>
+		{%- for line in conf -%}
+			{{ line }}
+		{% endfor %}
+		</pre>
+	</div>
+	{% else %}
 	<div style="margin-left: 16%" class="configShow">
 	{% set i = 0 -%}
 	{% set section_name = {} %}
@@ -27,9 +39,11 @@
 		{% if line.startswith('global') %}
 			<span class="param">{{ line }}
 				{% if role %}
-				<span class="accordion-link">
-					<a href="/app/sections.py?serv={{serv}}&section={{ line }}">Edit</a>
-				</span>
+					{% if service != 'keepalived' %}
+					<span class="accordion-link">
+						<a href="/app/sections.py?serv={{serv}}&section={{ line }}">Edit</a>
+					</span>
+					{% endif %}
 				{% endif %}
 			</span><div>
 			{% continue %}
@@ -112,6 +126,16 @@
 			</span><div>
 			{% continue %}
 		{% endif %}
+		{% if line.startswith('resolvers') %}
+			</div><span class="param">{{ line }}
+				{% if role %}
+					<span class="accordion-link">
+						<a href="/app/sections.py?serv={{serv}}&section={{ line }}">Edit</a>
+					</span>
+				{% endif %}
+			</span><div>
+			{% continue %}
+		{% endif %}
 		{% if line.startswith('userlist') %}
 			</div><span class="param">{{ line }}
 				{% if role %}
@@ -158,16 +182,19 @@
 	{%- endfor -%}
 	</div>
 	</div>
+	{% endif %}
 	{% if configver %}
 	<br>
 	<center>
-		<form action="versions.py#conf" method="post">
+		<form action="versions.py?service={{service}}" method="post">
 			<input type="hidden" value="{{serv}}" name="serv">
 			<input type="hidden" value="{{configver}}" name="configver">
 			<input type="hidden" value="1" name="config">
 			<button type='submit' value='save' name='save' class='btn btn-default'>Just save</button>
 			<button type='submit' value='' name='' class='btn btn-default'>Upload and restart</button>
+			{% if service != 'keepalived' %}
 			<button type='submit' value='reload' name='save' class='btn btn-default'>Upload and reload</button>
+			{% endif %}
 		</form>
 		<div class="alert alert-info"><b>Note:</b> If you reconfigure Master server, Slave will reconfigured automatically</div>
 	</center>
